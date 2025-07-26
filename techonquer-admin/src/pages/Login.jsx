@@ -45,8 +45,8 @@ export default function Login() {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError(err.message || 'An error occurred. Please try again later.');
       console.error('Login error:', err);
+      setError('Connection error. Please check your internet connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -153,12 +153,7 @@ export default function Login() {
               {/* Error Message */}
               {error && (
                 <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 backdrop-blur-sm">
-                  <div className="flex items-center">
-                    <svg className="h-5 w-5 text-red-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p className="text-red-400 text-sm">{error}</p>
-                  </div>
+                  <p className="text-red-400 text-sm">{error}</p>
                 </div>
               )}
 
@@ -177,24 +172,14 @@ export default function Login() {
                     Signing in...
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                    </svg>
-                    Sign In
-                  </div>
+                  'Sign In'
                 )}
               </button>
             </form>
 
             {/* Demo Credentials */}
             <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl backdrop-blur-sm">
-              <div className="flex items-center mb-3">
-                <svg className="h-5 w-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-sm font-semibold text-blue-300">Demo Credentials</h3>
-              </div>
+              <h3 className="text-sm font-semibold text-blue-300 mb-3">Demo Credentials</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-300">Email:</span>
