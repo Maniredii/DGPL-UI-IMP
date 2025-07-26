@@ -26,8 +26,7 @@ app.use(helmet());
 // CORS configuration
 const allowedOrigins = [
     process.env.FRONTEND_URL || 'http://localhost:3000',
-    'http://localhost:5173',  // Default Vite port
-    'http://localhost:8080'   // Current admin frontend URL
+    'http://localhost:5173'  // Assuming this is the admin frontend URL
 ];
 
 app.use(cors({

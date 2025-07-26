@@ -1,249 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../utils/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [focusedField, setFocusedField] = useState('');
   const navigate = useNavigate();
-
-  // Animated background particles
-  useEffect(() => {
-    const createParticle = () => {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDuration = Math.random() * 3 + 2 + 's';
-      particle.style.opacity = Math.random() * 0.5 + 0.1;
-      document.querySelector('.particles-container').appendChild(particle);
-      
-      setTimeout(() => {
-        particle.remove();
-      }, 5000);
-    };
-
-    const interval = setInterval(createParticle, 300);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
     try {
-      const data = await api.auth.login({ email, password });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
 
       if (data.success) {
+        // Store user info and force page reload to update authentication state
         localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/dashboard');
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
+      setError('An error occurred. Please try again later.');
       console.error('Login error:', err);
-      setError('Connection error. Please check your internet connection and try again.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Animated Background */}
-      <div className="particles-container absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-blue-600/20"></div>
+    <div className="flex items-center justify-center min-h-screen bg-black">
+      <div className="p-8 bg-gray-800 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">Admin Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label className="block text-gray-400 mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-400 mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+              required
+            />
+          </div>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+          >
+            Login
+          </button>
+        </form>
       </div>
-
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
-
-      {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-md">
-          {/* Brand Section */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-2xl mb-6 shadow-2xl">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
-              Techonquer
-            </h1>
-            <p className="text-gray-400 text-lg">Admin Dashboard</p>
-            <div className="mt-4 flex items-center justify-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-green-400 text-sm font-medium">System Online</span>
-            </div>
-          </div>
-
-          {/* Login Card */}
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl shadow-2xl border border-white/20 p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-              <p className="text-gray-400">Sign in to your admin account</p>
-            </div>
-            
-            <form onSubmit={handleLogin} className="space-y-6">
-              {/* Email Field */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-300" htmlFor="email">
-                  Email Address
-                </label>
-                <div className={`relative group ${focusedField === 'email' ? 'ring-2 ring-purple-500/50' : ''}`}>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={() => setFocusedField('email')}
-                    onBlur={() => setFocusedField('')}
-                    className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Enter your email"
-                    required
-                  />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/0 via-purple-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-300" htmlFor="password">
-                  Password
-                </label>
-                <div className={`relative group ${focusedField === 'password' ? 'ring-2 ring-purple-500/50' : ''}`}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onFocus={() => setFocusedField('password')}
-                    onBlur={() => setFocusedField('')}
-                    className="w-full px-4 pr-12 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-300 transition-colors"
-                  >
-                    {showPassword ? (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                      </svg>
-                    ) : (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    )}
-                  </button>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/0 via-purple-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                </div>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-red-400 text-sm">{error}</p>
-                </div>
-              )}
-
-              {/* Login Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Signing in...
-                  </div>
-                ) : (
-                  'Sign In'
-                )}
-              </button>
-            </form>
-
-            {/* Demo Credentials */}
-            <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl backdrop-blur-sm">
-              <h3 className="text-sm font-semibold text-blue-300 mb-3">Demo Credentials</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Email:</span>
-                  <span className="text-blue-200 font-mono">sample@gmail.com</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Password:</span>
-                  <span className="text-blue-200 font-mono">Sample@123</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center mt-8">
-            <p className="text-gray-500 text-sm">
-              © 2024 Techonquer. All rights reserved.
-            </p>
-            <div className="mt-2 flex items-center justify-center gap-4 text-xs text-gray-600">
-              <span>Privacy Policy</span>
-              <span>•</span>
-              <span>Terms of Service</span>
-              <span>•</span>
-              <span>Support</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .particle {
-          position: absolute;
-          width: 4px;
-          height: 4px;
-          background: linear-gradient(45deg, #8b5cf6, #ec4899);
-          border-radius: 50%;
-          animation: float 5s linear infinite;
-        }
-
-        @keyframes float {
-          0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-100px) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-
-        .delay-500 {
-          animation-delay: 0.5s;
-        }
-      `}</style>
     </div>
   );
 }
