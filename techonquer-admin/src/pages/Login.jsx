@@ -2,6 +2,28 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { BsShieldLock, BsEye, BsEyeSlash } from 'react-icons/bs';
 
+// Loading Skeleton Component
+const LoginSkeleton = () => (
+  <div className="space-y-6">
+    <div className="text-center mb-8">
+      <div className="w-16 h-16 mx-auto mb-4 skeleton rounded-full"></div>
+      <div className="skeleton skeleton-text w-48 mx-auto mb-2"></div>
+      <div className="skeleton skeleton-text w-32 mx-auto"></div>
+    </div>
+    <div className="space-y-6">
+      <div>
+        <div className="skeleton skeleton-text w-24 mb-2"></div>
+        <div className="skeleton skeleton-input"></div>
+      </div>
+      <div>
+        <div className="skeleton skeleton-text w-20 mb-2"></div>
+        <div className="skeleton skeleton-input"></div>
+      </div>
+      <div className="skeleton skeleton-button"></div>
+    </div>
+  </div>
+);
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,11 +34,17 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isInitializing, setIsInitializing] = useState(true);
   const navigate = useNavigate();
 
-  // Animate form entrance
+  // Animate form entrance and initialize
   React.useEffect(() => {
-    const timer = setTimeout(() => setIsFormVisible(true), 100);
+    const timer = setTimeout(() => {
+      setIsFormVisible(true);
+      setIsInitializing(false);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -28,6 +56,45 @@ export default function Login() {
       setRememberMe(true);
     }
   }, []);
+
+  // Real-time validation functions
+  const validateEmail = (email) => {
+    if (!email) {
+      setEmailError('Email is required');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError('Please enter a valid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      setPasswordError('Password is required');
+      return false;
+    }
+    if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (value) validateEmail(value);
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (value) validatePassword(value);
+  };
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
@@ -145,60 +212,86 @@ export default function Login() {
         <div className="particle"></div>
       </div>
 
-      <div className={`relative z-10 p-8 glass-card rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-500 hover:scale-105 glow-purple float-animation ${isFormVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-        <div className="text-center mb-8">
-          <div className="relative mb-6">
-            <BsShieldLock className="text-purple-400 text-6xl mx-auto mb-4 drop-shadow-lg animate-pulse float-animation" />
-            <div className="absolute inset-0 bg-purple-400 rounded-full blur-xl opacity-20 animate-ping"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full blur-2xl opacity-10 animate-pulse"></div>
-          </div>
-          <h2 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 via-violet-400 to-purple-400 bg-clip-text text-transparent text-shimmer">
-            Admin Portal
-          </h2>
-          <p className="text-gray-300 text-lg font-medium">Secure access for administrators</p>
-        </div>
+      <div className={`relative z-10 p-4 sm:p-8 glass-card rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-500 hover:scale-105 glow-purple float-animation ${isFormVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        {isInitializing ? (
+          <LoginSkeleton />
+        ) : (
+          <>
+            <div className="text-center mb-8">
+              <div className="relative mb-6">
+                <BsShieldLock className="text-purple-400 text-6xl mx-auto mb-4 drop-shadow-lg animate-pulse float-animation" />
+                <div className="absolute inset-0 bg-purple-400 rounded-full blur-xl opacity-20 animate-ping"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full blur-2xl opacity-10 animate-pulse"></div>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 via-violet-400 to-purple-400 bg-clip-text text-transparent text-shimmer">
+                Admin Portal
+              </h2>
+              <p className="text-base sm:text-lg text-gray-300 font-medium">Secure access for administrators</p>
+            </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6" role="form" aria-label="Admin login form">
           <div className="group">
             <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="email">
-              Email Address
+              Email Address *
             </label>
             <input
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105"
+              onChange={handleEmailChange}
+              onBlur={() => validateEmail(email)}
+              className={`w-full px-4 py-3 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105 ${emailError ? 'border-red-500 focus:border-red-500' : ''}`}
               placeholder="admin@techonquer.com"
               required
               disabled={isLoading}
+              aria-describedby={emailError ? "email-error" : undefined}
+              aria-invalid={emailError ? "true" : "false"}
             />
+            {emailError && (
+              <p id="email-error" className="mt-1 text-sm text-red-400" role="alert">
+                {emailError}
+              </p>
+            )}
           </div>
 
           <div className="group">
             <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="password">
-              Password
+              Password *
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pr-12 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105"
+                onChange={handlePasswordChange}
+                onBlur={() => validatePassword(password)}
+                className={`w-full px-4 py-3 pr-12 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105 ${passwordError ? 'border-red-500 focus:border-red-500' : ''}`}
                 placeholder="Enter your password"
                 required
                 disabled={isLoading}
+                aria-describedby={passwordError ? "password-error" : "password-help"}
+                aria-invalid={passwordError ? "true" : "false"}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors duration-200"
                 disabled={isLoading}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
               </button>
             </div>
+            {passwordError && (
+              <p id="password-error" className="mt-1 text-sm text-red-400" role="alert">
+                {passwordError}
+              </p>
+            )}
+            {!passwordError && (
+              <p id="password-help" className="mt-1 text-xs text-gray-500">
+                Minimum 6 characters required
+              </p>
+            )}
           </div>
 
           {/* Remember Me and Forgot Password */}
