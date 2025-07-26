@@ -10,6 +10,8 @@ import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import { ToastProvider } from './components/Toast';
+import { ThemeProvider } from './contexts/ThemeContext';
 import './App.css';
 
 function App() {
@@ -45,40 +47,44 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      {!isLoggedIn ? (
-        // Show only login and signup pages if not logged in
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      ) : (
-        // Show main app if logged in
-        <div className="grid-container">
-          <Sidebar
-            openSidebarToggle={openSidebarToggle}
-            OpenSidebar={OpenSidebar}
-          />
-          <main className="main-container">
-            <Header OpenSidebar={OpenSidebar} />
-            <div className="main-content">
-              <Routes>
-                <Route path="/login" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/files" element={<FileManager />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
-              </Routes>
-            </div>
-          </main>
-        </div>
-      )}
-    </Router>
+    <ThemeProvider>
+      <ToastProvider>
+        <Router>
+        {!isLoggedIn ? (
+          // Show only login and signup pages if not logged in
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        ) : (
+          // Show main app if logged in
+          <div className="grid-container">
+            <Sidebar
+              openSidebarToggle={openSidebarToggle}
+              OpenSidebar={OpenSidebar}
+            />
+            <main className="main-container">
+              <Header OpenSidebar={OpenSidebar} />
+              <div className="main-content">
+                <Routes>
+                  <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/courses" element={<Courses />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/files" element={<FileManager />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
+                </Routes>
+              </div>
+            </main>
+          </div>
+        )}
+        </Router>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 
