@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -9,24 +9,48 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import './App.css';
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
 
-  // Check if user is logged in
-  const isLoggedIn = localStorage.getItem('user');
+  // Check authentication status on mount and when localStorage changes
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const user = localStorage.getItem('user');
+      const newAuthStatus = !!user;
+      console.log('Auth status check:', { user, newAuthStatus, currentStatus: isLoggedIn });
+      setIsLoggedIn(newAuthStatus);
+    };
+
+    // Check initial auth status
+    checkAuthStatus();
+
+    // Listen for storage changes (when localStorage is modified)
+    window.addEventListener('storage', checkAuthStatus);
+
+    // Custom event listener for manual localStorage changes within the same tab
+    window.addEventListener('authChange', checkAuthStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkAuthStatus);
+      window.removeEventListener('authChange', checkAuthStatus);
+    };
+  }, []);
 
   return (
     <Router>
       {!isLoggedIn ? (
-        // Show only login page if not logged in
+        // Show only login and signup pages if not logged in
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       ) : (
@@ -38,17 +62,19 @@ function App() {
           />
           <main className="main-container">
             <Header OpenSidebar={OpenSidebar} />
-            <Routes>
-              <Route path="/login" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/files" element={<FileManager />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
-            </Routes>
+            <div className="main-content">
+              <Routes>
+                <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/files" element={<FileManager />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
+              </Routes>
+            </div>
           </main>
         </div>
       )}

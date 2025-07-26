@@ -13,7 +13,7 @@ const data = [
 
 export default function Dashboard() {
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 min-h-screen">
+    <div>
       <div className="mb-6">
         <h2 className="text-3xl font-bold text-white">Dashboard Overview</h2>
       </div>

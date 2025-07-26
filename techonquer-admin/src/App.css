@@ -31,10 +31,16 @@ body {
 .main-container {
   margin-left: 260px;
   flex-grow: 1;
-  padding: 1.5rem;
   background: linear-gradient(to bottom right, #111827, #1f2937);
   min-height: 100vh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  padding: 1.5rem;
+  flex-grow: 1;
 }
 
 .sidebar-title {
@@ -109,7 +115,22 @@ body {
   .main-container {
     margin-left: 0;
     width: 100%;
+  }
+
+  .main-content {
     padding: 1rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .header-right {
+    gap: 0.5rem;
+  }
+
+  .username {
+    display: none;
   }
 }
 
@@ -246,3 +267,185 @@ body {
     transform: translateX(0);
   }
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Glassmorphism Effects */
+.glass-card {
+  background: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-input {
+  background: rgba(55, 65, 81, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-input:focus {
+  background: rgba(55, 65, 81, 0.8);
+  border: 1px solid rgba(147, 51, 234, 0.5);
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+}
+
+/* Advanced Gradient Animations */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #1f2937, #4c1d95, #7c3aed, #1f2937);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Glow Effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+}
+
+.glow-purple:hover {
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+}
+
+/* Ripple Effect */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple-effect:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Morphing Shapes */
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+.morphing-shape {
+  animation: morph 8s ease-in-out infinite;
+}
+
+/* Text Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* Particle Effect */
+@keyframes particle-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-100px) rotate(180deg);
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(147, 51, 234, 0.6);
+  border-radius: 50%;
+  animation: particle-float 4s infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 1s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1.5s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 2s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 2.5s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 3s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 3.5s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 4s; }
