@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "techonquer-backend-api",
+		"name": "Techonquer Backend API",
+		"description": "Complete API collection for Techonquer Backend with session-based authentication, testimonials, and courses management.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminpass123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register-admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register-admin"
+							]
+						},
+						"description": "Register a new admin account (only available when ADMIN_REG=true)"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminpass123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with email and password"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Get current authenticated user details"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Logout and destroy session"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and session management"
+		},
+		{
+			"name": "Testimonials",
+			"item": [
+				{
+					"name": "Get All Testimonials",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/testimonials?page=1&limit=10&isActive=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"testimonials"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Items per page"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"description": "Filter by active status"
+								}
+							]
+						},
+						"description": "Get all testimonials with pagination and filtering"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Testimonial by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/testimonials/{{testimonial_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"testimonials",
+								"{{testimonial_id}}"
+							]
+						},
+						"description": "Get a specific testimonial by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Testimonial (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"designation\": \"Software Engineer\",\n  \"company\": \"Tech Corp\",\n  \"message\": \"This is an amazing platform! I learned so much from the courses here. Highly recommended for anyone looking to upgrade their tech skills.\",\n  \"rating\": 5,\n  \"image\": \"https://example.com/profile.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/testimonials",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"testimonials"
+							]
+						},
+						"description": "Create a new testimonial (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Testimonial (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe Updated\",\n  \"designation\": \"Senior Software Engineer\",\n  \"company\": \"Tech Corp\",\n  \"message\": \"This is an amazing platform! I learned so much from the courses here. Highly recommended for anyone looking to upgrade their tech skills. Updated review.\",\n  \"rating\": 5,\n  \"image\": \"https://example.com/profile-updated.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/testimonials/{{testimonial_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"testimonials",
+								"{{testimonial_id}}"
+							]
+						},
+						"description": "Update an existing testimonial (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Testimonial (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/testimonials/{{testimonial_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"testimonials",
+								"{{testimonial_id}}"
+							]
+						},
+						"description": "Delete a testimonial (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Testimonials management endpoints"
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/courses?page=1&limit=10&category=Programming&level=Beginner&isActive=true&isFeatured=false&sortBy=createdAt&sortOrder=desc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Items per page"
+								},
+								{
+									"key": "category",
+									"value": "Programming",
+									"description": "Filter by category"
+								},
+								{
+									"key": "level",
+									"value": "Beginner",
+									"description": "Filter by level"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"description": "Filter by active status"
+								},
+								{
+									"key": "isFeatured",
+									"value": "false",
+									"description": "Filter by featured status"
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt",
+									"description": "Sort field"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc",
+									"description": "Sort order (asc/desc)"
+								}
+							]
+						},
+						"description": "Get all courses with filtering, sorting, and pagination"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/courses/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses",
+								"categories"
+							]
+						},
+						"description": "Get all available course categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/courses/{{course_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses",
+								"{{course_id}}"
+							]
+						},
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Complete Web Development Bootcamp\",\n  \"description\": \"Learn full-stack web development from scratch. This comprehensive course covers HTML, CSS, JavaScript, Node.js, Express, MongoDB, and React. Perfect for beginners who want to become professional web developers.\",\n  \"shortDescription\": \"Master full-stack web development with HTML, CSS, JavaScript, Node.js, Express, MongoDB, and React.\",\n  \"instructor\": \"Sarah Johnson\",\n  \"duration\": \"12 weeks\",\n  \"level\": \"Beginner\",\n  \"price\": 2999,\n  \"originalPrice\": 4999,\n  \"category\": \"Web Development\",\n  \"tags\": [\"HTML\", \"CSS\", \"JavaScript\", \"Node.js\", \"React\", \"MongoDB\"],\n  \"image\": \"https://example.com/course-image.jpg\",\n  \"curriculum\": [\n    {\n      \"title\": \"Introduction to HTML & CSS\",\n      \"duration\": \"2 weeks\",\n      \"description\": \"Learn the basics of HTML and CSS to create beautiful web pages\"\n    },\n    {\n      \"title\": \"JavaScript Fundamentals\",\n      \"duration\": \"3 weeks\",\n      \"description\": \"Master JavaScript programming from basics to advanced concepts\"\n    },\n    {\n      \"title\": \"Backend Development with Node.js\",\n      \"duration\": \"3 weeks\",\n      \"description\": \"Build server-side applications using Node.js and Express\"\n    },\n    {\n      \"title\": \"Database Management with MongoDB\",\n      \"duration\": \"2 weeks\",\n      \"description\": \"Learn to work with NoSQL databases using MongoDB\"\n    },\n    {\n      \"title\": \"Frontend Framework - React\",\n      \"duration\": \"2 weeks\",\n      \"description\": \"Build modern user interfaces with React.js\"\n    }\n  ],\n  \"requirements\": [\n    \"Basic computer knowledge\",\n    \"No prior programming experience required\",\n    \"Computer with internet connection\",\n    \"Willingness to learn and practice\"\n  ],\n  \"whatYouWillLearn\": [\n    \"Build complete web applications from scratch\",\n    \"Master HTML, CSS, and JavaScript\",\n    \"Create RESTful APIs with Node.js and Express\",\n    \"Work with MongoDB database\",\n    \"Build modern UIs with React\",\n    \"Deploy applications to production\",\n    \"Understanding of web development best practices\"\n  ],\n  \"isFeatured\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/courses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses"
+							]
+						},
+						"description": "Create a new course (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Complete Web Development Bootcamp - Updated\",\n  \"description\": \"Learn full-stack web development from scratch with updated content. This comprehensive course covers HTML, CSS, JavaScript, Node.js, Express, MongoDB, and React. Perfect for beginners who want to become professional web developers.\",\n  \"price\": 2799,\n  \"isFeatured\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/courses/{{course_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses",
+								"{{course_id}}"
+							]
+						},
+						"description": "Update an existing course (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/courses/{{course_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"courses",
+								"{{course_id}}"
+							]
+						},
+						"description": "Delete a course (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Courses management endpoints"
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Check server health and status"
+					},
+					"response": []
+				},
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Get API information and available endpoints"
+					},
+					"response": []
+				}
+			],
+			"description": "Health check and API information endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "testimonial_id",
+			"value": "replace_with_actual_testimonial_id",
+			"type": "string"
+		},
+		{
+			"key": "course_id",
+			"value": "replace_with_actual_course_id",
+			"type": "string"
+		}
+	]
+}
