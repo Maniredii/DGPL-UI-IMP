@@ -9,7 +9,7 @@ const dummyUsers = [
 export default function Users() {
   return (
     <div className="p-6 text-white" style={{ backgroundColor: '#1a202c', minHeight: '100vh' }}>
-              <h2 className="text-xl md:text-2xl font-bold mb-4">Manage Users</h2>
+      <h2 className="text-2xl font-bold mb-4">Manage Users</h2>
       <table className="w-full bg-gray-800 rounded">
         <thead>
           <tr className="text-left text-gray-400 border-b border-gray-700">

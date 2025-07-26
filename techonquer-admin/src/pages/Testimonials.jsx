@@ -69,7 +69,7 @@ export default function Testimonials() {
   return (
     <div className="p-6 bg-black min-h-screen text-white">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-2xl md:text-3xl font-bold">Manage Testimonials</h2>
+        <h2 className="text-3xl font-bold">Manage Testimonials</h2>
         <button 
          onClick={() => setShowForm(!showForm)}
         style={{

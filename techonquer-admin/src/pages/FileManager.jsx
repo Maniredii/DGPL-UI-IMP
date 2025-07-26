@@ -117,7 +117,7 @@ export default function FileManager() {
     <div className="p-6 bg-black min-h-screen text-white">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-2xl md:text-3xl font-bold">File Manager</h2>
+        <h2 className="text-3xl font-bold">File Manager</h2>
       </div>
 
       {/* Upload Section */}
@@ -212,11 +212,11 @@ export default function FileManager() {
                   }}
                 />
               ) : (
-                <div className="w-full h-32 bg-gray-700 rounded-lg flex items-center justify-center text-2xl md:text-3xl">
+                <div className="w-full h-32 bg-gray-700 rounded-lg flex items-center justify-center text-4xl">
                   {getFileIcon(file.mimetype, file.category)}
                 </div>
               )}
-              <div className="w-full h-32 bg-gray-700 rounded-lg items-center justify-center text-2xl md:text-3xl hidden">
+              <div className="w-full h-32 bg-gray-700 rounded-lg items-center justify-center text-4xl hidden">
                 {getFileIcon(file.mimetype, file.category)}
               </div>
             </div>
@@ -282,9 +282,9 @@ export default function FileManager() {
           </div>
         )) : (
           <div className="col-span-full text-center py-12">
-            <div className="text-4xl md:text-6xl mb-4">📁</div>
-            <h3 className="text-lg md:text-xl font-semibold text-gray-400 mb-2">No files found</h3>
-            <p className="text-gray-500 text-sm md:text-base">Upload your first file to get started</p>
+            <div className="text-6xl mb-4">📁</div>
+            <h3 className="text-xl font-semibold text-gray-400 mb-2">No files found</h3>
+            <p className="text-gray-500">Upload your first file to get started</p>
           </div>
         )}
       </div>

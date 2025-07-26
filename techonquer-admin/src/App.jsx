@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import Header from './Header';
 import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
-import Testimonials from './pages/Testimonials';
 import Users from './pages/Users';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
@@ -37,23 +35,19 @@ function App() {
             openSidebarToggle={openSidebarToggle} 
             OpenSidebar={OpenSidebar}
           />
-          <div className="main-content">
-            <Header OpenSidebar={OpenSidebar} />
-            <main className="main-container">
-              <Routes>
-                <Route path="/login" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/testimonials" element={<Testimonials />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/files" element={<FileManager />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
-              </Routes>
-            </main>
-          </div>
+          <main className="main-container">
+            <Routes>
+              <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/files" element={<FileManager />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
+            </Routes>
+          </main>
         </div>
       )}
     </Router>

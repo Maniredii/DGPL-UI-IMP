@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 require('dotenv').config();
 
-const createAdminUser = async () => {
+const createDefaultAdmin = async () => {
     try {
         // Connect to MongoDB
         await mongoose.connect(process.env.MONGODB_URI);
@@ -16,7 +16,7 @@ const createAdminUser = async () => {
             process.exit(0);
         }
 
-        // Create admin user
+        // Create default admin user
         const adminUser = new User({
             username: 'admin',
             email: 'sample@gmail.com',
@@ -26,16 +26,18 @@ const createAdminUser = async () => {
         });
 
         await adminUser.save();
-        console.log('Admin user created successfully');
-        console.log('Email: sample@gmail.com');
-        console.log('Password: Sample@123');
-        
+        console.log('✅ Default admin user created successfully!');
+        console.log('📧 Email: sample@gmail.com');
+        console.log('🔑 Password: Sample@123');
+        console.log('👤 Role: admin');
+
     } catch (error) {
-        console.error('Error creating admin user:', error);
+        console.error('❌ Error creating admin user:', error);
     } finally {
         await mongoose.disconnect();
+        console.log('Disconnected from MongoDB');
         process.exit(0);
     }
 };
 
-createAdminUser(); 
+createDefaultAdmin(); 

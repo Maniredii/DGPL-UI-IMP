@@ -10,7 +10,7 @@ const reportData = [
 export default function Reports() {
   return (
     <div className="p-6 text-white">
-              <h2 className="text-xl md:text-2xl font-bold mb-6">Reports</h2>
+      <h2 className="text-2xl font-bold mb-6">Reports</h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={reportData}>
           <XAxis dataKey="name" />
