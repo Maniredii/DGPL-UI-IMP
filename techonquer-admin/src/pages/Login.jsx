@@ -230,32 +230,41 @@ export default function Login() {
             </div>
 
         <form onSubmit={handleLogin} className="space-y-6" role="form" aria-label="Admin login form">
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="email">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
               Email Address *
             </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleEmailChange}
-              onBlur={() => validateEmail(email)}
-              className={`w-full px-4 py-3 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105 ${emailError ? 'border-red-500 focus:border-red-500' : ''}`}
-              placeholder="admin@techonquer.com"
-              required
-              disabled={isLoading}
-              aria-describedby={emailError ? "email-error" : undefined}
-              aria-invalid={emailError ? "true" : "false"}
-            />
+            <div className="relative">
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={() => validateEmail(email)}
+                className={`form-input ${emailError ? 'form-input-error' : ''}`}
+                placeholder="admin@techonquer.com"
+                required
+                disabled={isLoading}
+                aria-describedby={emailError ? "email-error" : undefined}
+                aria-invalid={emailError ? "true" : "false"}
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <div className={`w-2 h-2 rounded-full transition-colors ${
+                  email && !emailError ? 'bg-green-400' :
+                  emailError ? 'bg-red-400' :
+                  'bg-gray-600'
+                }`}></div>
+              </div>
+            </div>
             {emailError && (
-              <p id="email-error" className="mt-1 text-sm text-red-400" role="alert">
+              <p id="email-error" className="form-error" role="alert">
                 {emailError}
               </p>
             )}
           </div>
 
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="password">
+          <div className="form-group">
+            <label className="form-label" htmlFor="password">
               Password *
             </label>
             <div className="relative">
@@ -265,7 +274,7 @@ export default function Login() {
                 value={password}
                 onChange={handlePasswordChange}
                 onBlur={() => validatePassword(password)}
-                className={`w-full px-4 py-3 pr-12 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300 transform focus:scale-105 ${passwordError ? 'border-red-500 focus:border-red-500' : ''}`}
+                className={`form-input pr-12 ${passwordError ? 'form-input-error' : ''}`}
                 placeholder="Enter your password"
                 required
                 disabled={isLoading}
@@ -275,20 +284,52 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary-400 transition-colors duration-200 p-1 rounded-md hover:bg-white/10"
                 disabled={isLoading}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
+                {showPassword ? <BsEyeSlash size={18} /> : <BsEye size={18} />}
               </button>
+              <div className="absolute inset-y-0 right-10 flex items-center pr-3 pointer-events-none">
+                <div className={`w-2 h-2 rounded-full transition-colors ${
+                  password && !passwordError ? 'bg-green-400' :
+                  passwordError ? 'bg-red-400' :
+                  'bg-gray-600'
+                }`}></div>
+              </div>
             </div>
             {passwordError && (
-              <p id="password-error" className="mt-1 text-sm text-red-400" role="alert">
+              <p id="password-error" className="form-error" role="alert">
                 {passwordError}
               </p>
             )}
-            {!passwordError && (
-              <p id="password-help" className="mt-1 text-xs text-gray-500">
+            {!passwordError && password && (
+              <div className="mt-2">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-gray-400">Strength:</span>
+                  <div className="flex-1 bg-gray-700 rounded-full h-1">
+                    <div
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        password.length >= 8 ? 'bg-green-400 w-full' :
+                        password.length >= 6 ? 'bg-yellow-400 w-2/3' :
+                        'bg-red-400 w-1/3'
+                      }`}
+                    ></div>
+                  </div>
+                  <span className={`text-xs font-medium ${
+                    password.length >= 8 ? 'text-green-400' :
+                    password.length >= 6 ? 'text-yellow-400' :
+                    'text-red-400'
+                  }`}>
+                    {password.length >= 8 ? 'Strong' :
+                     password.length >= 6 ? 'Medium' :
+                     'Weak'}
+                  </span>
+                </div>
+              </div>
+            )}
+            {!passwordError && !password && (
+              <p id="password-help" className="form-help">
                 Minimum 6 characters required
               </p>
             )}
@@ -296,20 +337,22 @@ export default function Login() {
 
           {/* Remember Me and Forgot Password */}
           <div className="flex items-center justify-between">
-            <label className="flex items-center">
+            <label className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
+                className="form-checkbox"
                 disabled={isLoading}
               />
-              <span className="ml-2 text-sm text-gray-300">Remember me</span>
+              <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                Remember me
+              </span>
             </label>
             <button
               type="button"
               onClick={() => setShowForgotPassword(true)}
-              className="text-sm text-purple-400 hover:text-purple-300 transition-colors duration-200"
+              className="text-sm text-primary-400 hover:text-primary-300 transition-colors duration-200 font-medium hover:underline"
               disabled={isLoading}
             >
               Forgot password?
@@ -317,27 +360,38 @@ export default function Login() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-900/50 border border-red-700/50 rounded-xl backdrop-blur-sm animate-shake">
-              <p className="text-red-300 text-sm text-center font-medium">{error}</p>
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl backdrop-blur-sm animate-shake">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-red-400 text-xs">!</span>
+                </div>
+                <p className="text-red-300 text-sm font-medium">{error}</p>
+              </div>
             </div>
           )}
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 disabled:from-purple-800 disabled:to-violet-800 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center transform hover:scale-105 disabled:hover:scale-100 shadow-lg hover:shadow-purple-500/25 ripple-effect glow-purple"
+            disabled={isLoading || emailError || passwordError}
+            className="btn btn-primary w-full py-4 text-base font-semibold relative overflow-hidden group"
           >
-            {isLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Signing In...
-              </>
-            ) : (
-              'Sign In'
-            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative flex items-center justify-center gap-3">
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Signing In...</span>
+                </>
+              ) : (
+                <>
+                  <BsShieldLock className="text-lg" />
+                  <span>Sign In</span>
+                </>
+              )}
+            </div>
           </button>
         </form>
 
@@ -372,12 +426,19 @@ export default function Login() {
 
       {/* Forgot Password Modal */}
       {showForgotPassword && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="glass-card rounded-2xl p-6 w-full max-w-sm transform transition-all duration-300 scale-100">
-            <h3 className="text-xl font-bold text-white mb-4 text-center">Reset Password</h3>
-            <form onSubmit={handleForgotPassword}>
-              <div className="mb-4">
-                <label className="block text-gray-300 mb-2 font-medium" htmlFor="forgotEmail">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="glass-card rounded-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-100 animate-fade-in-up">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
+                <BsShieldLock className="text-2xl text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Reset Password</h3>
+              <p className="text-gray-400 text-sm">Enter your email to receive reset instructions</p>
+            </div>
+
+            <form onSubmit={handleForgotPassword} className="space-y-6">
+              <div className="form-group">
+                <label className="form-label" htmlFor="forgotEmail">
                   Email Address
                 </label>
                 <input
@@ -385,11 +446,13 @@ export default function Login() {
                   id="forgotEmail"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className="w-full px-4 py-3 glass-input rounded-xl text-white placeholder-gray-400 focus:outline-none transition-all duration-300"
-                  placeholder="Enter your email"
+                  className="form-input"
+                  placeholder="Enter your email address"
                   required
+                  autoFocus
                 />
               </div>
+
               <div className="flex gap-3">
                 <button
                   type="button"
@@ -398,13 +461,13 @@ export default function Login() {
                     setForgotEmail('');
                     setError('');
                   }}
-                  className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-xl transition-colors duration-200"
+                  className="btn btn-secondary flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white rounded-xl transition-all duration-200"
+                  className="btn btn-primary flex-1"
                 >
                   Send Reset Link
                 </button>

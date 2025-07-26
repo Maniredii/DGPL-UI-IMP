@@ -184,78 +184,220 @@ export default function Dashboard() {
           color="from-orange-500 to-orange-600"
           subtitle="This month"
         />
+      </div>
 
-          <div className="w-80 bg-gradient-to-r from-pink-900/50 to-pink-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-pink-500/20 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center gap-3">
-              <BsFillBellFill className="text-pink-400 text-4xl" />
-              <div className="flex-1">
-                <p className="text-pink-200 text-lg font-semibold">Active Alerts</p>
-                <span className="text-4xl font-bold text-white">36</span>
-                <p className="text-sm text-red-400 flex items-center mt-1">
-                  <span className="mr-1">↑</span> 8% this week
-                </p>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* User Growth Chart */}
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-white">User Growth</h3>
+                <p className="text-gray-400 text-sm">Monthly active users trend</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="status-indicator status-success">
+                  <BsArrowUpRight className="text-xs" />
+                  Growing
+                </div>
               </div>
             </div>
           </div>
+          <div className="card-body">
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={monthlyData}>
+                  <defs>
+                    <linearGradient id="userGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#9ca3af', fontSize: 12 }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#9ca3af', fontSize: 12 }}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="users"
+                    stroke="#0ea5e9"
+                    strokeWidth={3}
+                    fill="url(#userGradient)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
 
-          <div className="w-80 bg-gradient-to-r from-blue-900/50 to-blue-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-blue-500/20 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center gap-3">
-              <BsBookFill className="text-blue-400 text-4xl" />
-              <div className="flex-1">
-                <p className="text-blue-200 text-lg font-semibold">Total Courses</p>
-                <span className="text-4xl font-bold text-white">58</span>
-                <p className="text-sm text-green-400 flex items-center mt-1">
-                  <span className="mr-1">↑</span> 4 new this month
-                </p>
+        {/* Course Distribution */}
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-white">Course Distribution</h3>
+                <p className="text-gray-400 text-sm">Students per course category</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <BsEyeFill className="text-gray-400" />
+                <span className="text-sm text-gray-400">1,570 total</span>
               </div>
             </div>
           </div>
-
-          <div className="w-80 bg-gradient-to-r from-yellow-900/50 to-yellow-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-yellow-500/20 transform hover:scale-105 transition-transform duration-200">
-            <div className="flex items-center gap-3">
-              <BsFileTextFill className="text-yellow-400 text-4xl" />
-              <div className="flex-1">
-                <p className="text-yellow-200 text-lg font-semibold">Reports Generated</p>
-                <span className="text-4xl font-bold text-white">14</span>
-                <p className="text-sm text-gray-300 mt-1">Last 7 days</p>
-              </div>
+          <div className="card-body">
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={courseData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={120}
+                    paddingAngle={5}
+                    dataKey="students"
+                  >
+                    {courseData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              {courseData.map((course, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: course.color }}
+                  ></div>
+                  <div className="flex-1">
+                    <p className="text-white text-sm font-medium">{course.name}</p>
+                    <p className="text-gray-400 text-xs">{course.students} students</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Chart Section - Full width below */}
-      <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-purple-500/20">
-        <h3 className="text-xl font-semibold mb-4 text-white">User Growth & Alerts</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={data}>
-            <XAxis dataKey="name" stroke="#fff" />
-            <YAxis stroke="#fff" />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                border: '1px solid rgba(147, 51, 234, 0.3)',
-                borderRadius: '8px',
-                color: '#fff',
-                backdropFilter: 'blur(4px)'
-              }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="users" 
-              stroke="#8b5cf6" 
-              strokeWidth={3}
-              dot={{ fill: '#8b5cf6', r: 6 }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="alerts" 
-              stroke="#ec4899" 
-              strokeWidth={3}
-              dot={{ fill: '#ec4899', r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Recent Activity & Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Activity */}
+        <div className="lg:col-span-2 card">
+          <div className="card-header">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-white">Recent Activity</h3>
+                <p className="text-gray-400 text-sm">Latest user interactions</p>
+              </div>
+              <button className="btn btn-secondary text-xs">
+                View All
+              </button>
+            </div>
+          </div>
+          <div className="card-body">
+            <div className="space-y-4">
+              {recentActivities.map((activity) => (
+                <div key={activity.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    activity.type === 'enrollment' ? 'bg-blue-500/20 text-blue-400' :
+                    activity.type === 'completion' ? 'bg-green-500/20 text-green-400' :
+                    activity.type === 'review' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-purple-500/20 text-purple-400'
+                  }`}>
+                    {activity.type === 'enrollment' ? <BsBookFill /> :
+                     activity.type === 'completion' ? <BsGraphUpArrow /> :
+                     activity.type === 'review' ? <BsEyeFill /> :
+                     <BsFileTextFill />}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white text-sm">
+                      <span className="font-semibold">{activity.user}</span> {activity.action}
+                    </p>
+                    <p className="text-gray-400 text-xs flex items-center gap-1">
+                      <BsClockHistory />
+                      {activity.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions & System Status */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="text-lg font-bold text-white">Quick Actions</h3>
+            </div>
+            <div className="card-body">
+              <div className="space-y-3">
+                <button className="btn btn-primary w-full justify-start">
+                  <BsBookFill />
+                  Add New Course
+                </button>
+                <button className="btn btn-secondary w-full justify-start">
+                  <BsPeopleFill />
+                  Manage Users
+                </button>
+                <button className="btn btn-secondary w-full justify-start">
+                  <BsFileTextFill />
+                  Generate Report
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* System Status */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="text-lg font-bold text-white">System Status</h3>
+            </div>
+            <div className="card-body">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 text-sm">Server Status</span>
+                  <div className="status-indicator status-success">Online</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 text-sm">Database</span>
+                  <div className="status-indicator status-success">Connected</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 text-sm">API Status</span>
+                  <div className="status-indicator status-success">Active</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 text-sm">Last Backup</span>
+                  <span className="text-gray-400 text-sm">2 hours ago</span>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-300 text-sm">Storage Used</span>
+                    <span className="text-white text-sm font-semibold">68%</span>
+                  </div>
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{ width: '68%' }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
