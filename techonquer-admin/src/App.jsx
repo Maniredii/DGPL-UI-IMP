@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import Header from './Header';
 import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
 import Users from './pages/Users';
@@ -31,11 +32,12 @@ function App() {
       ) : (
         // Show main app if logged in
         <div className="grid-container">
-          <Sidebar 
-            openSidebarToggle={openSidebarToggle} 
+          <Sidebar
+            openSidebarToggle={openSidebarToggle}
             OpenSidebar={OpenSidebar}
           />
           <main className="main-container">
+            <Header OpenSidebar={OpenSidebar} />
             <Routes>
               <Route path="/login" element={<Navigate to="/dashboard" replace />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />

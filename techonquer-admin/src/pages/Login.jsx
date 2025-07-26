@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BsShieldLock } from 'react-icons/bs';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
@@ -24,15 +27,24 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success) {
-        // Store user info and force page reload to update authentication state
+        // Check if user has admin role
+        if (data.user.role !== 'admin') {
+          setError('Access denied. Admin privileges required.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Store user info and navigate to dashboard
         localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/dashboard';
+        navigate('/dashboard');
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
       setError('An error occurred. Please try again later.');
       console.error('Login error:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 

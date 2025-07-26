@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { BsPeopleFill, BsFillBellFill, BsBookFill, BsFileTextFill } from 'react-icons/bs';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -13,23 +12,10 @@ const data = [
 ];
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    navigate('/login');
-  };
-
   return (
     <div className="p-6 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6">
         <h2 className="text-3xl font-bold text-white">Dashboard Overview</h2>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-        >
-          Logout
-        </button>
       </div>
 
       {/* Stats cards - Always horizontal with scroll */}
