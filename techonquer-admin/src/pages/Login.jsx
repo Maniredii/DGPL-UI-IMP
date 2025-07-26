@@ -361,11 +361,13 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-500 text-sm">
-            Authorized personnel only
-          </p>
-        </div>
+            <div className="mt-6 text-center">
+              <p className="text-gray-500 text-sm">
+                Authorized personnel only
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Forgot Password Modal */}
