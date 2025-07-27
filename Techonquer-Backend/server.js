@@ -4,6 +4,7 @@ const MongoStore = require('connect-mongo');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
@@ -56,6 +57,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
 
+// Serve static files from React build (if you're serving frontend from backend)
+app.use(express.static(path.join(__dirname, '../techonquer-admin/dist')));
+
 // Session configuration
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -104,12 +108,17 @@ app.get('/', (req, res) => {
     });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-    res.status(404).json({
-        success: false,
-        message: 'Route not found'
-    });
+// Catch-all handler: send back React's index.html file for non-API routes
+app.get('*', (req, res) => {
+    // Only serve React app for non-API routes
+    if (!req.path.startsWith('/api/') && !req.path.startsWith('/uploads/') && !req.path.startsWith('/health')) {
+        res.sendFile(path.join(__dirname, '../techonquer-admin/dist/index.html'));
+    } else {
+        res.status(404).json({
+            success: false,
+            message: 'API route not found'
+        });
+    }
 });
 
 // Global error handler
