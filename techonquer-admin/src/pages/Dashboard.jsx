@@ -12,6 +12,7 @@ import {
   BsClockHistory
 } from 'react-icons/bs';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { Card, Button, Badge } from '../components/ui';
 
 const monthlyData = [
   { name: 'Jan', users: 200, alerts: 5, revenue: 12000, courses: 45 },
@@ -64,28 +65,29 @@ const StatsCard = ({ icon: Icon, title, value, change, changeType, color, subtit
   }, []);
 
   return (
-    <div className={`card transform transition-all duration-500 hover:scale-105 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
-      <div className="card-body">
-        <div className="flex items-center justify-between mb-4">
-          <div className={`p-3 rounded-2xl bg-gradient-to-br ${color}`}>
-            <Icon className="text-2xl text-white" />
-          </div>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold ${
-            changeType === 'increase'
-              ? 'bg-green-500/20 text-green-400'
-              : 'bg-red-500/20 text-red-400'
-          }`}>
-            {changeType === 'increase' ? <BsArrowUpRight /> : <BsArrowDownRight />}
-            {change}
-          </div>
+    <Card
+      className={`transform transition-all duration-500 hover:scale-105 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}
+      hover
+      variant="elevated"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className={`p-3 rounded-lg ${color} shadow-sm`}>
+          <Icon className="text-2xl text-white" />
         </div>
-        <div>
-          <h3 className="text-gray-400 text-sm font-medium mb-1">{title}</h3>
-          <p className="text-3xl font-bold text-white mb-1">{value}</p>
-          {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
-        </div>
+        <Badge
+          variant={changeType === 'increase' ? 'success' : 'danger'}
+          className="flex items-center gap-1"
+        >
+          {changeType === 'increase' ? <BsArrowUpRight /> : <BsArrowDownRight />}
+          {change}
+        </Badge>
       </div>
-    </div>
+      <div>
+        <h3 className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">{title}</h3>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{value}</p>
+        {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400">{subtitle}</p>}
+      </div>
+    </Card>
   );
 };
 
@@ -102,41 +104,43 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="loading-skeleton skeleton-title"></div>
+        <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="loading-skeleton skeleton-card"></div>
+            <div key={i} className="h-32 bg-slate-200 dark:bg-slate-700 rounded-2xl animate-pulse"></div>
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="loading-skeleton skeleton-card"></div>
-          <div className="loading-skeleton skeleton-card"></div>
+          <div className="h-80 bg-slate-200 dark:bg-slate-700 rounded-2xl animate-pulse"></div>
+          <div className="h-80 bg-slate-200 dark:bg-slate-700 rounded-2xl animate-pulse"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-gradient font-display">Dashboard Overview</h1>
-          <p className="text-gray-400 mt-2 flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Dashboard Overview
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-2 flex items-center gap-2">
             <BsCalendar3 className="text-sm" />
             Welcome back! Here's what's happening with your platform today.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-white/5 rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
             {['1W', '1M', '3M', '6M', '1Y'].map((period) => (
               <button
                 key={period}
                 onClick={() => setSelectedPeriod(period)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                   selectedPeriod === period
-                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/10'
+                    ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700'
                 }`}
               >
                 {period}
@@ -154,7 +158,7 @@ export default function Dashboard() {
           value="1,204"
           change="12%"
           changeType="increase"
-          color="from-blue-500 to-blue-600"
+          color="bg-blue-600"
           subtitle="Active this month"
         />
         <StatsCard
@@ -163,7 +167,7 @@ export default function Dashboard() {
           value="36"
           change="8%"
           changeType="increase"
-          color="from-purple-500 to-purple-600"
+          color="bg-purple-600"
           subtitle="Requires attention"
         />
         <StatsCard
@@ -172,7 +176,7 @@ export default function Dashboard() {
           value="73"
           change="15%"
           changeType="increase"
-          color="from-green-500 to-green-600"
+          color="bg-green-600"
           subtitle="Published courses"
         />
         <StatsCard
@@ -181,7 +185,7 @@ export default function Dashboard() {
           value="$35,000"
           change="23%"
           changeType="increase"
-          color="from-orange-500 to-orange-600"
+          color="bg-orange-600"
           subtitle="This month"
         />
       </div>
@@ -189,22 +193,22 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Growth Chart */}
-        <div className="card">
-          <div className="card-header">
+        <Card variant="elevated">
+          <Card.Header>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">User Growth</h3>
-                <p className="text-gray-400 text-sm">Monthly active users trend</p>
+                <Card.Title>User Growth</Card.Title>
+                <Card.Description>Monthly active users trend</Card.Description>
               </div>
               <div className="flex items-center gap-2">
-                <div className="status-indicator status-success">
+                <Badge variant="success" className="flex items-center gap-1">
                   <BsArrowUpRight className="text-xs" />
                   Growing
-                </div>
+                </Badge>
               </div>
             </div>
-          </div>
-          <div className="card-body">
+          </Card.Header>
+          <Card.Content>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyData}>
@@ -236,24 +240,24 @@ export default function Dashboard() {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
 
         {/* Course Distribution */}
-        <div className="card">
-          <div className="card-header">
+        <Card variant="elevated">
+          <Card.Header>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">Course Distribution</h3>
-                <p className="text-gray-400 text-sm">Students per course category</p>
+                <Card.Title>Course Distribution</Card.Title>
+                <Card.Description>Students per course category</Card.Description>
               </div>
               <div className="flex items-center gap-2">
-                <BsEyeFill className="text-gray-400" />
-                <span className="text-sm text-gray-400">1,570 total</span>
+                <BsEyeFill className="text-slate-400 dark:text-slate-500" />
+                <span className="text-sm text-slate-500 dark:text-slate-400">1,570 total</span>
               </div>
             </div>
-          </div>
-          <div className="card-body">
+          </Card.Header>
+          <Card.Content>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -282,40 +286,40 @@ export default function Dashboard() {
                     style={{ backgroundColor: course.color }}
                   ></div>
                   <div className="flex-1">
-                    <p className="text-white text-sm font-medium">{course.name}</p>
-                    <p className="text-gray-400 text-xs">{course.students} students</p>
+                    <p className="text-slate-900 dark:text-white text-sm font-medium">{course.name}</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs">{course.students} students</p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
       </div>
 
       {/* Recent Activity & Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <div className="lg:col-span-2 card">
-          <div className="card-header">
+        <Card className="lg:col-span-2" variant="elevated">
+          <Card.Header>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">Recent Activity</h3>
-                <p className="text-gray-400 text-sm">Latest user interactions</p>
+                <Card.Title>Recent Activity</Card.Title>
+                <Card.Description>Latest user interactions</Card.Description>
               </div>
-              <button className="btn btn-secondary text-xs">
+              <Button variant="secondary" size="sm">
                 View All
-              </button>
+              </Button>
             </div>
-          </div>
-          <div className="card-body">
+          </Card.Header>
+          <Card.Content>
             <div className="space-y-4">
               {recentActivities.map((activity) => (
-                <div key={activity.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                <div key={activity.id} className="flex items-center gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    activity.type === 'enrollment' ? 'bg-blue-500/20 text-blue-400' :
-                    activity.type === 'completion' ? 'bg-green-500/20 text-green-400' :
-                    activity.type === 'review' ? 'bg-yellow-500/20 text-yellow-400' :
-                    'bg-purple-500/20 text-purple-400'
+                    activity.type === 'enrollment' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
+                    activity.type === 'completion' ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' :
+                    activity.type === 'review' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' :
+                    'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
                   }`}>
                     {activity.type === 'enrollment' ? <BsBookFill /> :
                      activity.type === 'completion' ? <BsGraphUpArrow /> :
@@ -323,10 +327,10 @@ export default function Dashboard() {
                      <BsFileTextFill />}
                   </div>
                   <div className="flex-1">
-                    <p className="text-white text-sm">
+                    <p className="text-slate-900 dark:text-white text-sm">
                       <span className="font-semibold">{activity.user}</span> {activity.action}
                     </p>
-                    <p className="text-gray-400 text-xs flex items-center gap-1">
+                    <p className="text-slate-500 dark:text-slate-400 text-xs flex items-center gap-1">
                       <BsClockHistory />
                       {activity.time}
                     </p>
@@ -334,69 +338,69 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
 
         {/* Quick Actions & System Status */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-lg font-bold text-white">Quick Actions</h3>
-            </div>
-            <div className="card-body">
+          <Card variant="elevated">
+            <Card.Header>
+              <Card.Title>Quick Actions</Card.Title>
+            </Card.Header>
+            <Card.Content>
               <div className="space-y-3">
-                <button className="btn btn-primary w-full justify-start">
+                <Button variant="primary" className="w-full justify-start gap-3">
                   <BsBookFill />
                   Add New Course
-                </button>
-                <button className="btn btn-secondary w-full justify-start">
+                </Button>
+                <Button variant="secondary" className="w-full justify-start gap-3">
                   <BsPeopleFill />
                   Manage Users
-                </button>
-                <button className="btn btn-secondary w-full justify-start">
+                </Button>
+                <Button variant="secondary" className="w-full justify-start gap-3">
                   <BsFileTextFill />
                   Generate Report
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </Card.Content>
+          </Card>
 
           {/* System Status */}
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-lg font-bold text-white">System Status</h3>
-            </div>
-            <div className="card-body">
+          <Card variant="elevated">
+            <Card.Header>
+              <Card.Title>System Status</Card.Title>
+            </Card.Header>
+            <Card.Content>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">Server Status</span>
-                  <div className="status-indicator status-success">Online</div>
+                  <span className="text-slate-600 dark:text-slate-400 text-sm">Server Status</span>
+                  <Badge variant="success">Online</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">Database</span>
-                  <div className="status-indicator status-success">Connected</div>
+                  <span className="text-slate-600 dark:text-slate-400 text-sm">Database</span>
+                  <Badge variant="success">Connected</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">API Status</span>
-                  <div className="status-indicator status-success">Active</div>
+                  <span className="text-slate-600 dark:text-slate-400 text-sm">API Status</span>
+                  <Badge variant="success">Active</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">Last Backup</span>
-                  <span className="text-gray-400 text-sm">2 hours ago</span>
+                  <span className="text-slate-600 dark:text-slate-400 text-sm">Last Backup</span>
+                  <span className="text-slate-500 dark:text-slate-400 text-sm">2 hours ago</span>
                 </div>
                 <div className="mt-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-300 text-sm">Storage Used</span>
-                    <span className="text-white text-sm font-semibold">68%</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-sm">Storage Used</span>
+                    <span className="text-slate-900 dark:text-white text-sm font-semibold">68%</span>
                   </div>
-                  <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: '68%' }}></div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-300" style={{ width: '68%' }}></div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </Card.Content>
+          </Card>
         </div>
       </div>
     </div>

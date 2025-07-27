@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { BsPersonPlus, BsEye, BsEyeSlash, BsCheckCircle, BsXCircle } from 'react-icons/bs';
+import { BsPersonPlus, BsEye, BsEyeSlash, BsCheckCircle, BsXCircle, BsEnvelope, BsLock, BsPerson } from 'react-icons/bs';
+import ThemeToggle from '../components/ThemeToggle';
+import { Input, Button } from '../components/ui';
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -137,206 +139,194 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen animated-gradient relative overflow-hidden py-8">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse morphing-shape"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-violet-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000 morphing-shape"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse animation-delay-4000 morphing-shape"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4 transition-colors duration-300">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 bg-[size:20px_20px] opacity-20"></div>
 
-        {/* Floating particles */}
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
+      {/* Theme Toggle */}
+      <div className="absolute top-6 right-6 z-10">
+        <ThemeToggle size="md" />
       </div>
 
-      <div className="relative z-10 p-8 glass-card rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-500 hover:scale-105 glow-purple float-animation">
-        <div className="text-center mb-8">
-          <div className="relative mb-6">
-            <BsPersonPlus className="text-purple-400 text-6xl mx-auto mb-4 drop-shadow-lg animate-pulse float-animation" />
-            <div className="absolute inset-0 bg-purple-400 rounded-full blur-xl opacity-20 animate-ping"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-violet-400 rounded-full blur-2xl opacity-10 animate-pulse"></div>
-          </div>
-          <h2 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 via-violet-400 to-purple-400 bg-clip-text text-transparent text-shimmer">
-            Create Admin Account
-          </h2>
-          <p className="text-gray-300 text-lg font-medium">Join the administrative team</p>
-        </div>
+      {/* Signup Card */}
+      <div className="relative w-full max-w-lg">
+        {/* Decorative Elements */}
+        <div className="absolute -top-4 -left-4 w-24 h-24 bg-indigo-500/10 dark:bg-indigo-400/10 rounded-full blur-xl"></div>
+        <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-500/10 dark:bg-purple-400/10 rounded-full blur-xl"></div>
 
-        <form onSubmit={handleSignup} className="space-y-6">
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="username">
-              Username
-            </label>
-            <input
+        <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 rounded-3xl shadow-2xl shadow-slate-200/50 dark:shadow-slate-900/50 p-8 transition-all duration-300">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
+              <BsPersonPlus className="text-white text-2xl" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Create Account</h1>
+            <p className="text-slate-600 dark:text-slate-400">Join the administrative team</p>
+          </div>
+
+          <form onSubmit={handleSignup} className="space-y-6">
+            {/* Username Input */}
+            <Input
+              label="Username"
+              icon={BsPerson}
               type="text"
-              id="username"
               name="username"
               value={formData.username}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 backdrop-blur-sm"
               placeholder="Enter your username"
               required
               disabled={isLoading}
             />
-          </div>
 
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="email">
-              Email Address
-            </label>
-            <input
+            {/* Email Input */}
+            <Input
+              label="Email Address"
+              icon={BsEnvelope}
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 backdrop-blur-sm"
               placeholder="admin@example.com"
               required
               disabled={isLoading}
             />
-          </div>
 
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="password">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 pr-12 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 backdrop-blur-sm"
-                placeholder="Create a strong password"
-                required
-                disabled={isLoading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors duration-200"
-                disabled={isLoading}
-              >
-                {showPassword ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
-              </button>
+            {/* Password Input */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <BsLock className="h-5 w-5 text-slate-400 dark:text-slate-500" />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Create a strong password"
+                  className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
+                  disabled={isLoading}
+                >
+                  {showPassword ? <BsEyeSlash className="h-5 w-5" /> : <BsEye className="h-5 w-5" />}
+                </button>
+              </div>
+              {formData.password && (
+                <div className="mt-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className={`font-medium ${
+                      passwordStrength <= 1 ? 'text-red-600 dark:text-red-400' :
+                      passwordStrength <= 2 ? 'text-orange-600 dark:text-orange-400' :
+                      passwordStrength <= 3 ? 'text-yellow-600 dark:text-yellow-400' :
+                      passwordStrength <= 4 ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'
+                    }`}>
+                      {getPasswordStrengthText().text}
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400">{passwordStrength}/5</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mt-1">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        passwordStrength <= 1 ? 'bg-red-500' :
+                        passwordStrength <= 2 ? 'bg-orange-500' :
+                        passwordStrength <= 3 ? 'bg-yellow-500' :
+                        passwordStrength <= 4 ? 'bg-blue-500' : 'bg-green-500'
+                      }`}
+                      style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
             </div>
-            {formData.password && (
-              <div className="mt-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className={`font-medium ${getPasswordStrengthText().color}`}>
-                    {getPasswordStrengthText().text}
-                  </span>
-                  <span className="text-gray-400">{passwordStrength}/5</span>
+
+            {/* Confirm Password Input */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <BsLock className="h-5 w-5 text-slate-400 dark:text-slate-500" />
                 </div>
-                <div className="w-full bg-gray-600 rounded-full h-1 mt-1">
-                  <div 
-                    className={`h-1 rounded-full transition-all duration-300 ${
-                      passwordStrength <= 1 ? 'bg-red-500' :
-                      passwordStrength <= 2 ? 'bg-orange-500' :
-                      passwordStrength <= 3 ? 'bg-yellow-500' :
-                      passwordStrength <= 4 ? 'bg-blue-500' : 'bg-green-500'
-                    }`}
-                    style={{ width: `${(passwordStrength / 5) * 100}%` }}
-                  ></div>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  placeholder="Confirm your password"
+                  className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
+                  disabled={isLoading}
+                >
+                  {showConfirmPassword ? <BsEyeSlash className="h-5 w-5" /> : <BsEye className="h-5 w-5" />}
+                </button>
+              </div>
+              {formData.confirmPassword && (
+                <div className="mt-2 flex items-center text-xs">
+                  {formData.password === formData.confirmPassword ? (
+                    <><BsCheckCircle className="text-green-600 dark:text-green-400 mr-1" /> <span className="text-green-600 dark:text-green-400">Passwords match</span></>
+                  ) : (
+                    <><BsXCircle className="text-red-600 dark:text-red-400 mr-1" /> <span className="text-red-600 dark:text-red-400">Passwords do not match</span></>
+                  )}
                 </div>
+              )}
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                <p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>
               </div>
             )}
-          </div>
 
-          <div className="group">
-            <label className="block text-gray-300 mb-2 font-medium transition-colors group-focus-within:text-purple-400" htmlFor="confirmPassword">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 pr-12 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 backdrop-blur-sm"
-                placeholder="Confirm your password"
-                required
-                disabled={isLoading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors duration-200"
-                disabled={isLoading}
-              >
-                {showConfirmPassword ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
-              </button>
-            </div>
-            {formData.confirmPassword && (
-              <div className="mt-2 flex items-center text-xs">
-                {formData.password === formData.confirmPassword ? (
-                  <><BsCheckCircle className="text-green-500 mr-1" /> <span className="text-green-500">Passwords match</span></>
-                ) : (
-                  <><BsXCircle className="text-red-500 mr-1" /> <span className="text-red-500">Passwords do not match</span></>
-                )}
+            {/* Success Message */}
+            {success && (
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
+                <p className="text-sm text-green-600 dark:text-green-400 text-center">{success}</p>
               </div>
             )}
-          </div>
 
-          {error && (
-            <div className="p-4 bg-red-900/50 border border-red-700/50 rounded-xl backdrop-blur-sm animate-shake">
-              <p className="text-red-300 text-sm text-center font-medium">{error}</p>
-            </div>
-          )}
-
-          {success && (
-            <div className="p-4 bg-green-900/50 border border-green-700/50 rounded-xl backdrop-blur-sm">
-              <p className="text-green-300 text-sm text-center font-medium">{success}</p>
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 disabled:from-purple-800 disabled:to-violet-800 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center transform hover:scale-105 disabled:hover:scale-100 shadow-lg hover:shadow-purple-500/25"
-          >
-            {isLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Creating Account...
-              </>
-            ) : (
-              'Create Admin Account'
-            )}
-          </button>
-        </form>
-
-        {/* Navigation to login */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            Already have an account?{' '}
-            <Link 
-              to="/login" 
-              className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 hover:underline"
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              loading={isLoading}
+              className="w-full"
+              size="lg"
             >
-              Sign in here
-            </Link>
-          </p>
-        </div>
+              {isLoading ? 'Creating Account...' : 'Create Admin Account'}
+            </Button>
+          </form>
 
-        {/* Info about admin registration */}
-        <div className="mt-6 p-4 bg-yellow-900/30 border border-yellow-700/50 rounded-xl backdrop-blur-sm">
-          <p className="text-yellow-300 text-xs text-center">
-            <strong>Note:</strong> Admin registration must be enabled on the server
-          </p>
+          {/* Navigation to login */}
+          <div className="mt-8 text-center">
+            <p className="text-slate-600 dark:text-slate-400">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
+              >
+                Sign in here
+              </Link>
+            </p>
+          </div>
+
+          {/* Info about admin registration */}
+          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+            <p className="text-yellow-700 dark:text-yellow-300 text-sm text-center">
+              <strong>Note:</strong> Admin registration must be enabled on the server
+            </p>
+          </div>
         </div>
       </div>
     </div>

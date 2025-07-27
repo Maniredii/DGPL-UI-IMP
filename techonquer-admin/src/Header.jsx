@@ -11,6 +11,7 @@ import {
   BsGearFill,
   BsBell
 } from 'react-icons/bs';
+import ThemeToggle from './components/ThemeToggle';
 
 // Breadcrumb mapping
 const breadcrumbMap = {
@@ -244,6 +245,9 @@ function Header({ OpenSidebar }) {
           <button className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all duration-200" aria-label="Settings">
             <BsGearFill size={18} />
           </button>
+
+          {/* Theme Toggle */}
+          <ThemeToggle size="md" className="ml-2" />
 
           {/* User Menu */}
           <div className="flex items-center space-x-3">

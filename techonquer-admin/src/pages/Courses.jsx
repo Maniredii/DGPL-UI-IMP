@@ -10,6 +10,20 @@ import {
   ResponsiveContainer,
   CartesianGrid
 } from 'recharts';
+import {
+  BsPlus,
+  BsSearch,
+  BsEye,
+  BsPencil,
+  BsTrash,
+  BsBookFill,
+  BsPeopleFill,
+  BsGraphUpArrow,
+  BsFilter,
+  BsDownload,
+  BsUpload
+} from 'react-icons/bs';
+import { Card, Button, Input, Badge } from '../components/ui';
 
 const courseStats = [
   { name: 'React', enrolled: 120, completion: 80 },
@@ -395,112 +409,134 @@ export default function Courses() {
   };
 
   return (
-    <div className="p-6 bg-black min-h-screen text-white">
-      {/* Header + Buttons */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-3xl font-bold">Manage Courses</h2>
-        <button 
-         onClick={() => setShowForm(!showForm)}
-        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300">
-          + Add Course
-        </button>
-        
-        {/* Popup Modal */}
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Manage Courses</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">Create, edit, and manage your course catalog</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="secondary" size="md" className="gap-2">
+            <BsDownload />
+            Export
+          </Button>
+          <Button variant="primary" size="md" className="gap-2" onClick={() => setShowForm(!showForm)}>
+            <BsPlus />
+            Add Course
+          </Button>
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <Card>
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          <div className="flex-1">
+            <Input
+              icon={BsSearch}
+              placeholder="Search courses by title, instructor, or category..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" size="md" className="gap-2">
+              <BsFilter />
+              Filter
+            </Button>
+            <select className="px-4 py-2.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">All Categories</option>
+              <option value="programming">Programming</option>
+              <option value="design">Design</option>
+              <option value="marketing">Marketing</option>
+            </select>
+          </div>
+        </div>
+      </Card>
+
+        {/* Add Course Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-white">Add New Course</h3>
-                <button 
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+              <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Add New Course</h3>
+                <button
                   onClick={() => {setShowForm(false); resetForm();}}
-                  className="text-gray-400 hover:text-white text-2xl"
+                  className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors duration-200"
                 >
-                  ×
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
+              <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Basic Information */}
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-purple-400 mb-3">Basic Information</h4>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Course Title *</label>
-                    <input
-                      type="text"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Basic Information */}
+                  <div className="space-y-6">
+                    <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4">Basic Information</h4>
+
+                    <Input
+                      label="Course Title *"
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                      placeholder="Enter course title"
                       required
                     />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Course Path *</label>
-                    <input
-                      type="text"
+
+                    <Input
+                      label="Course Path *"
                       name="path"
                       value={formData.path}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
                       placeholder="e.g., vapt-july-2025-batch"
+                      help="URL-friendly identifier for the course"
                       required
                     />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Instructor *</label>
-                    <input
-                      type="text"
+
+                    <Input
+                      label="Instructor *"
                       name="instructor"
                       value={formData.instructor}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                      placeholder="Enter instructor name"
                       required
                     />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Duration *</label>
-                    <input
-                      type="text"
+
+                    <Input
+                      label="Duration *"
                       name="duration"
                       value={formData.duration}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
                       placeholder="e.g., 2 months"
                       required
                     />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Level *</label>
-                    <select
-                      name="level"
-                      value={formData.level}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
-                    >
-                      <option value="Beginner">Beginner</option>
-                      <option value="Intermediate">Intermediate</option>
-                      <option value="Advanced">Advanced</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-300 mb-2">Category *</label>
-                    <input
-                      type="text"
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Level *</label>
+                      <select
+                        name="level"
+                        value={formData.level}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      >
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                      </select>
+                    </div>
+
+                    <Input
+                      label="Category *"
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
                       placeholder="e.g., Cybersecurity"
                       required
                     />
                   </div>
-                </div>
                 
                 {/* Pricing and Links */}
                 <div className="space-y-4">
@@ -1026,50 +1062,30 @@ export default function Courses() {
             </div>
           </div>
         )}
-
       </div>
 
-      {/* Search Bar */}
-      <input
-        type="text"
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-        placeholder="Search courses..."
-        style={{
-          width: '70%',
-          marginBottom: '1.5rem',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#18181b',
-          border: '1px solid #3f3f46',
-          borderRadius: '6px',
-          color: 'white'
-        }}
-      />
-
-      {/* Table Layout */}
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        backgroundColor: '#1f2937',
-        color: 'white',
-        marginBottom: '2rem',
-        borderRadius: '8px',
-        overflow: 'hidden'
-      }}>
-        <thead style={{ backgroundColor: '#111827' }}>
-          <tr>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>S.No.</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Course Name</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Instructor</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Category</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Level</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Price (₹)</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151', textAlign: 'left' }}>Featured</th>
-            <th style={{ padding: '12px', borderBottom: '1px solid #374151' }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCourses.map((course, index) => (
+      {/* Courses Table */}
+      <Card variant="elevated">
+        <Card.Header>
+          <Card.Title>Course Management</Card.Title>
+          <Card.Description>Manage course details and pricing</Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr style={{ borderBottom: '2px solid #374151' }}>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>S.No</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Course</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Instructor</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Category</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Level</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Price</th>
+                  <th style={{ padding: '12px', textAlign: 'left' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCourses.map((course, index) => (
             <tr key={course._id} style={{ borderBottom: '1px solid #374151' }}>
               <td style={{ padding: '12px' }}>{index + 1}</td>
               <td style={{ padding: '12px' }}>
@@ -1172,10 +1188,13 @@ export default function Courses() {
               </td>
             </tr>
           ))}
-        </tbody>
-      </table>
-     
-     {/* Testimonials Table */}
+              </tbody>
+            </table>
+          </div>
+        </Card.Content>
+      </Card>
+
+      {/* Testimonials Table */}
 <h2 className="text-2xl font-bold mb-4 mt-12">Testimonials</h2>
 <table style={{
   width: '100%',
