@@ -59,14 +59,23 @@ function App() {
           </Routes>
         ) : (
           // Show main app if logged in
-          <div className="grid-container">
+          <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
             <Sidebar
               openSidebarToggle={openSidebarToggle}
               OpenSidebar={OpenSidebar}
             />
-            <main className="main-container">
+
+            {/* Overlay for mobile */}
+            {openSidebarToggle && (
+              <div
+                className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+                onClick={OpenSidebar}
+              />
+            )}
+
+            <main className="flex-1 lg:ml-72 flex flex-col min-h-screen">
               <Header OpenSidebar={OpenSidebar} />
-              <div className="main-content">
+              <div className="flex-1 p-6">
                 <Routes>
                   <Route path="/login" element={<Navigate to="/dashboard" replace />} />
                   <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -76,7 +85,7 @@ function App() {
                   <Route path="/reports" element={<Reports />} />
                   <Route path="/files" element={<FileManager />} />
                   <Route path="/settings" element={<Settings />} />
-                  <Route path="*" element={<h1 className="text-white">404 - Not Found</h1>} />
+                  <Route path="*" element={<div className="text-center py-12"><h1 className="text-2xl font-bold text-slate-700 dark:text-slate-300">404 - Page Not Found</h1></div>} />
                 </Routes>
               </div>
             </main>
