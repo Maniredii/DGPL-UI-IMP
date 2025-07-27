@@ -11,6 +11,9 @@ import {
   BsShieldLock
 } from 'react-icons/bs';
 import ThemeToggle from '../components/ThemeToggle';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
+import Card from '../components/ui/Card';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -140,42 +143,34 @@ export default function Login() {
             {/* Email Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <BsEnvelope className="h-5 w-5 text-slate-400 dark:text-slate-500" />
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  required
-                  disabled={isLoading}
-                />
-              </div>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                icon={BsEnvelope}
+                required
+                disabled={isLoading}
+              />
             </div>
 
             {/* Password Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <BsLock className="h-5 w-5 text-slate-400 dark:text-slate-500" />
-                </div>
-                <input
+                <Input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  icon={BsLock}
                   required
                   disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200 z-10"
                   disabled={isLoading}
                 >
                   {showPassword ? <BsEyeSlash className="h-5 w-5" /> : <BsEye className="h-5 w-5" />}

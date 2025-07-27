@@ -42,13 +42,26 @@ const recentActivities = [
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-card p-4 border border-white/20">
-        <p className="text-white font-semibold mb-2">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-sm" style={{ color: entry.color }}>
-            {entry.name}: {entry.value.toLocaleString()}
-          </p>
-        ))}
+      <div className="backdrop-blur-xl bg-white/10 dark:bg-slate-900/80 border border-white/20 dark:border-slate-700/50 rounded-xl p-4 shadow-2xl animate-scale-in">
+        <p className="text-slate-900 dark:text-white font-semibold mb-3 text-sm">{label}</p>
+        <div className="space-y-2">
+          {payload.map((entry, index) => (
+            <div key={index} className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full" 
+                  style={{ backgroundColor: entry.color }}
+                />
+                <span className="text-slate-700 dark:text-slate-300 text-sm font-medium">
+                  {entry.name}
+                </span>
+              </div>
+              <span className="text-slate-900 dark:text-white font-bold text-sm">
+                {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
