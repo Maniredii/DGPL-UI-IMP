@@ -12,7 +12,6 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { ToastProvider } from './components/Toast';
 import { ThemeProvider } from './contexts/ThemeContext';
-import './App.css';
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
